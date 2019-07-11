@@ -10,7 +10,6 @@ import { ListItem, Divider } from "react-native-elements";
 import { Ionicons as Icon } from "@expo/vector-icons";
 import Collapsible from "react-native-collapsible";
 import ChatButton from "../chatbot/chatButton";
-import SignatureButton from "../signature/signatureButton";
 
 const { styles } = require("./styles");
 
@@ -179,9 +178,6 @@ export default class OrdersScreen extends React.Component {
         </View>
         <View>
           <ChatButton navigation={navigation} />
-        </View>
-        <View>
-          <SignatureButton navigation={navigation} />
         </View>
       </View>
     );

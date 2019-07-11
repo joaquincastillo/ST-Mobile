@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import Signature from "react-native-signature-canvas";
 
 export default class SignatureScreen extends React.Component {
@@ -12,14 +12,39 @@ export default class SignatureScreen extends React.Component {
 
     this.handleSignature = this.handleSignature.bind(this);
     this.cleanSignature = this.cleanSignature.bind(this);
+
+    const saveSignature = this.props.saveSignature;
+    saveSignature("x");
+    console.log("FIN");
   }
 
   handleSignature = signature => {
     this.setState({ signature });
+
+    this.finishSignature();
   };
 
   cleanSignature() {
+    console.log(this.state.signature);
     this.setState({ signature: null });
+  }
+
+  finishSignature() {
+    Alert.alert(
+      "¿Enviar firma digital?",
+      "",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Cancel Pressed")
+        },
+        {
+          text: "Enviar",
+          onPress: () => this.props.saveSignature(this.state.signature)
+        }
+      ],
+      { cancelable: false }
+    );
   }
 
   render() {

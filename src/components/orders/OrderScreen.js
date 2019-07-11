@@ -1,11 +1,24 @@
 import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, Alert } from "react-native";
+import ChatButton from "../chatbot/chatButton";
+import SignatureButton from "../signature/signatureButton";
 const { styles } = require("./styles");
 
 class OrderScreen extends React.Component {
   static navigationOptions = {
     title: "Orden de Trabajo"
   };
+
+  constructor(props) {
+    super(props);
+    this.state = { signature: null };
+    this.saveSignature = this.saveSignature.bind(this);
+  }
+
+  saveSignature(signature) {
+    console.log("saveSignature [ORDERSCREEN]");
+    this.setState({ signature });
+  }
 
   render() {
     const { navigation } = this.props;
@@ -51,6 +64,12 @@ class OrderScreen extends React.Component {
         </View>
         <View>
           <ChatButton navigation={navigation} />
+        </View>
+        <View>
+          <SignatureButton
+            navigation={navigation}
+            onSignature={this.saveSignature}
+          />
         </View>
       </View>
     );

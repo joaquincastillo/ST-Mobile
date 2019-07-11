@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Text,
   View,
@@ -9,7 +9,10 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   Animated
-} from 'react-native';
+} from "react-native";
+
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 
 const {
   styles,
@@ -19,14 +22,14 @@ const {
   errorColor,
   imageHeight,
   imageHeightSmall
-} = require('./styles');
-const greenLogo = require('../../assets/images/st-computacion.png');
-const greenMail = require('../../assets/images/mail.png');
-const greenLock = require('../../assets/images/lock.png');
+} = require("./styles");
+const greenLogo = require("../../assets/images/st-computacion.png");
+const greenMail = require("../../assets/images/mail.png");
+const greenLock = require("../../assets/images/lock.png");
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
 
   constructor(props) {
@@ -35,16 +38,22 @@ class LoginScreen extends React.Component {
     this.keyboardWillShow = this.keyboardWillShow.bind(this);
     this.keyboardWillHide = this.keyboardWillHide.bind(this);
     this.state = {
-      email: '',
-      password: '',
-      loading: false,
+      email: "",
+      password: "",
+      loading: false
     };
   }
 
   // Manejo de la aparición del teclado
   componentDidMount() {
-    this.keyboardWillShowSub = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    this.keyboardWillShowSub = Keyboard.addListener(
+      "keyboardWillShow",
+      this.keyboardWillShow
+    );
+    this.keyboardWillHideSub = Keyboard.addListener(
+      "keyboardWillHide",
+      this.keyboardWillHide
+    );
   }
 
   componentWillUnmount() {
@@ -52,45 +61,62 @@ class LoginScreen extends React.Component {
     this.keyboardWillHideSub.remove();
   }
 
+  isEmailValid = email => {
+    const pattern = /^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(String(email).toLowerCase());
+  };
 
-  keyboardWillShow = (event) => {
+  // Manejo de botones
+  async onPressLoginButton() {
+    const { email, password } = this.state;
+    if (!email.length || !password.length) {
+      // || !isEmailValid(email)) {
+      this.setState({ error: true, email: "", password: "" });
+    } else {
+      this.setState({ error: false, loading: true });
+      const { screenProps, navigation, signinUser } = this.props;
+      signinUser(email, password)
+        .then(({ data }) => {
+          console.log(data.signIn);
+          if (data.signIn) {
+            //screenProps.changeLoginState(true, data.signIn);
+            navigation.navigate("Orders");
+          } else {
+            console.log("error clave");
+            this.setState({ error: true, loading: false });
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          this.setState({ connectionError: true, loading: false });
+        });
+    }
+  }
+
+  keyboardWillShow = event => {
     Animated.timing(this.imageHeight, {
       duration: event.duration,
-      toValue: imageHeightSmall,
+      toValue: imageHeightSmall
     }).start();
   };
 
-  keyboardWillHide = (event) => {
+  keyboardWillHide = event => {
     Animated.timing(this.imageHeight, {
       duration: event.duration,
-      toValue: imageHeight,
+      toValue: imageHeight
     }).start();
   };
-
 
   render() {
     const { navigation } = this.props;
-    const {
-      email, password
-    } = this.state;
+    const { email, password } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: mainColor }}>
-
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior="padding"
-        >
-          <Image
-            style={styles.logo}
-            source={greenLogo}
-            resizeMode="center"
-          />
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <Image style={styles.logo} source={greenLogo} resizeMode="center" />
 
           <View style={styles.inputSection}>
-            <Image
-              style={styles.searchIcon}
-              source={greenMail}
-            />
+            <Image style={styles.searchIcon} source={greenMail} />
             <TextInput
               style={styles.inputText}
               placeholder="Correo Electrónico"
@@ -104,10 +130,7 @@ class LoginScreen extends React.Component {
             />
           </View>
           <View style={styles.inputSection}>
-            <Image
-              style={styles.searchIcon}
-              source={greenLock}
-            />
+            <Image style={styles.searchIcon} source={greenLock} />
             <TextInput
               style={styles.inputText}
               placeholder="Contraseña"
@@ -117,22 +140,27 @@ class LoginScreen extends React.Component {
               placeholderTextColor={placeholderTextColor}
               textAlign="left"
               value={password}
-              onChangeText={passwordInput => this.setState({ password: passwordInput })}
+              onChangeText={passwordInput =>
+                this.setState({ password: passwordInput })
+              }
             />
           </View>
-          <View style={{
-            justifyContent: 'center', width: '100%', height: 50, marginVertical: 10,
-          }}
+          <View
+            style={{
+              justifyContent: "center",
+              width: "100%",
+              height: 50,
+              marginVertical: 10
+            }}
           >
-
             <TouchableOpacity
               style={styles.hugeButton}
-              onPress={() => navigation.navigate('Orders')}
+              onPress={() => this.onPressLoginButton()}
             >
-              <Text style={{ color: mainColor, fontWeight: 'bold' }}>Iniciar Sesión</Text>
-    
+              <Text style={{ color: mainColor, fontWeight: "bold" }}>
+                Iniciar Sesión
+              </Text>
             </TouchableOpacity>
-
           </View>
 
           <View>
@@ -140,7 +168,9 @@ class LoginScreen extends React.Component {
               style={styles.recoverPassword}
               // onPress={() => navigation.navigate('RecoverPass')}
             >
-              <Text textAlign="center" style={{ color: strongColor }}>¿Desea recuperar su contraseña?</Text>
+              <Text textAlign="center" style={{ color: strongColor }}>
+                ¿Desea recuperar su contraseña?
+              </Text>
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -149,5 +179,18 @@ class LoginScreen extends React.Component {
   }
 }
 
-
-export default LoginScreen;
+export default graphql(
+  gql`
+    mutation signinUser($login: String!, $password: String!) {
+      signIn(login: $login, password: $password) {
+        token
+      }
+    }
+  `,
+  {
+    props: ({ mutate }) => ({
+      signinUser: (login, password) =>
+        mutate({ variables: { login, password } })
+    })
+  }
+)(LoginScreen);
