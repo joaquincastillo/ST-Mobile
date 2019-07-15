@@ -13,8 +13,6 @@ export default class SignatureScreen extends React.Component {
     this.handleSignature = this.handleSignature.bind(this);
     this.cleanSignature = this.cleanSignature.bind(this);
 
-    const saveSignature = this.props.saveSignature;
-    saveSignature("x");
     console.log("FIN");
   }
 

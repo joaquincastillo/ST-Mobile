@@ -47,7 +47,10 @@ const LoginStack = createStackNavigator({
 });
 
 const OrdersStack = createStackNavigator({
-  Orders: { screen: OrdersScreen }
+  Orders: { screen: OrdersScreen },
+  Order: { screen: OrderScreen },
+  Chat: { screen: ChatScreen },
+  Signature: { screen: SignatureScreen }
 });
 
 const AuthStack = createStackNavigator(
