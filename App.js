@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { View, Image, StatusBar, TouchableOpacity } from "react-native";
 import { ApolloClient } from "apollo-client";
 
 import { InMemoryCache } from "apollo-cache-inmemory";
@@ -12,9 +13,9 @@ import {
   createSwitchNavigator,
   createDrawerNavigator
 } from "react-navigation";
+import { DrawerActions } from "react-navigation-drawer";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
-import { StatusBar } from "react-native";
 
 // Screens
 import LoginScreen from "./src/components/login/loginScreen";
@@ -35,6 +36,7 @@ import {
 
 // Utils
 import { signIn, signOut, getHeaders } from "./src/auth_util";
+//import { TouchableOpacity } from "react-native-gesture-handler";
 
 require("moment/locale/es.js");
 
@@ -47,8 +49,29 @@ const LoginStack = createStackNavigator({
 });
 
 const OrdersStack = createStackNavigator({
-  Orders: { screen: OrdersScreen },
-  Order: { screen: OrderScreen },
+  Orders: {
+    screen: OrdersScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: "Orders 1",
+      headerLeft: <NavigatorDrawerStructure navigation={navigation} />,
+      headerStyle: {
+        backgroundColor: "#FF9800"
+      },
+      headerTintColor: "#fff"
+    })
+  },
+  // Order: {
+  //   screen: OrderScreen,
+  //   navigationOptions: ({ navigation }) => ({
+  //     title: "Order 2",
+  //     headerLeft: <NavigatorDrawerStructure navigation={navigation} />,
+
+  //     headerStyle: {
+  //       backgroundColor: "#FF9800"
+  //     },
+  //     headerTintColor: "#fff"
+  //   })
+  // },
   Chat: { screen: ChatScreen },
   Signature: { screen: SignatureScreen }
 });
@@ -90,6 +113,54 @@ const AppCont = createAppContainer(
     }
   )
 );
+
+class NavigatorDrawerStructure extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleDrawer = this.toggleDrawer.bind(this);
+  }
+
+  toggleDrawer() {
+    //this.props.navigationProps.toggleDrawer();
+    console.log("[ToggleDrawer]: Executing...");
+    this.props.navigation.dispatch(DrawerActions.toggleDrawer());
+    //this.props.navigation.toggleDrawer();
+  }
+
+  render() {
+    return (
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity onPress={this.toggleDrawer}>
+          <Image
+            source={require("./src/assets/images/lock.png")}
+            style={{ width: 25, height: 25, marginLeft: 5 }}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+
+export const DrawerNavigatorExample = createDrawerNavigator({
+  Screen1: {
+    screen: OrdersStack,
+    navigationOptions: {
+      drawerLabel: "Demo Screen 1"
+    }
+  },
+  Screen2: {
+    screen: OrdersStack,
+    navigationOptions: {
+      drawerLabel: "Demo Screen 2"
+    }
+  },
+  Screen3: {
+    screen: OrdersStack,
+    navigationOptions: {
+      drawerLabel: "Demo Screen 3"
+    }
+  }
+});
 
 // const MainApp = createDrawerNavigator(
 //   {
