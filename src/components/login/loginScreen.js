@@ -79,7 +79,7 @@ class LoginScreen extends React.Component {
         .then(({ data }) => {
           console.log(data.signIn);
           if (data.signIn) {
-            //screenProps.changeLoginState(true, data.signIn);
+            screenProps.changeLoginState(true, data.signIn);
             navigation.navigate("Orders");
           } else {
             console.log("error clave");
