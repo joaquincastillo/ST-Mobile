@@ -38,7 +38,7 @@ export default class SignatureScreen extends React.Component {
         },
         {
           text: "Enviar",
-          onPress: () => this.props.saveSignature(this.state.signature)
+          onPress: () => console.log(`Firma: ${this.state.signature}`)
         }
       ],
       { cancelable: false }

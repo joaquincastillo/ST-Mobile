@@ -121,7 +121,7 @@ const authLink = setContext((_, { headers }) =>
       // return the headers to the context so httpLink can read them
       headers: {
         ...headers,
-        JWTACCESSTOKEN: actualHeaders.token ? `${actualHeaders.token}` : "",
+        //JWTACCESSTOKEN: actualHeaders.token ? `${actualHeaders.token}` : "",
         token: actualHeaders.token ? `${actualHeaders.token}` : ""
       }
     }))
