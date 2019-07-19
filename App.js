@@ -132,7 +132,9 @@ const authLink = setContext((_, { headers }) =>
 // });
 
 const httpLink = new HttpLink({
-  uri: "http://170.84.211.53:8000/graphql"
+  // FIXME: change this when going into production
+  uri: "http://8b5cab03.ngrok.io/graphql"
+  //uri: "http://170.84.211.53:8000/graphql"
 });
 
 const client = new ApolloClient({

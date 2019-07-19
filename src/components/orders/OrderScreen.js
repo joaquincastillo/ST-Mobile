@@ -84,7 +84,7 @@ class OrderScreen extends React.Component {
                 <View>
                   <ChatButton
                     navigation={navigation}
-                    chatId={data.ticket.chat.id}
+                    chatId2={data.ticket.chat.id}
                   />
                 </View>
                 <View>

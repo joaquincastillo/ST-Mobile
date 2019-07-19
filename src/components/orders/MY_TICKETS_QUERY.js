@@ -1,33 +1,38 @@
 import gql from "graphql-tag";
 
 const MY_TICKETS_QUERY = gql`
-  query UserTickets($userId: ID!) {
-    userTickets(userId: $userId) {
+  query UserAssignations($userId: ID!) {
+    userAssignations(userId: $userId) {
       edges {
-        id
-        chat {
+        ticket {
           id
+          type
+          service
+          priority
+          description
+          state {
+            state
+          }
+          createdAt
+          chat {
+            id
+          }
+          client {
+            id
+            email
+            name
+            address
+            phone
+          }
+          owner {
+            username
+            phone
+          }
+          datetime
+          supervisor {
+            username
+          }
         }
-        client {
-          name
-          address
-          phone
-        }
-        owner {
-          username
-          phone
-        }
-        state {
-          state
-        }
-        service
-        type
-        priority
-        supervisor {
-          username
-        }
-        datetime
-        createdAt
       }
       pageInfo {
         hasNextPage

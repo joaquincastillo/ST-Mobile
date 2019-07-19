@@ -1,14 +1,17 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 import Signature from "react-native-signature-canvas";
 
-export default class SignatureScreen extends React.Component {
+class SignatureScreen extends React.Component {
   static navigationOptions = {
     title: "Firma digital"
   };
   constructor(props) {
     super(props);
-    this.state = { signature: null };
+    const { order_id } = this.props;
+    this.state = { signature: null, order_id: order_id };
 
     this.handleSignature = this.handleSignature.bind(this);
     this.cleanSignature = this.cleanSignature.bind(this);
@@ -43,6 +46,12 @@ export default class SignatureScreen extends React.Component {
       ],
       { cancelable: false }
     );
+  }
+
+  onSendSignature() {
+    const { updateSignature } = this.props;
+    const { signature, order_id } = this.state;
+    updateSignature(order_id, signature);
   }
 
   render() {
@@ -98,3 +107,19 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 });
+
+export default graphql(
+  gql`
+    mutation updateSignature($id: ID!, $signature: String!) {
+      updateSignature(id: $id, signature: $signature) {
+        token
+      }
+    }
+  `,
+  {
+    props: ({ mutate }) => ({
+      updateSignature: (id, signature) =>
+        mutate({ variables: { id, signature } })
+    })
+  }
+)(SignatureScreen);

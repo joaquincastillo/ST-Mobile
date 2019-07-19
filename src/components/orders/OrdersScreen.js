@@ -44,17 +44,22 @@ export default class OrdersScreen extends React.Component {
     // created, assigned y closed. No se obtienen tickets creados, ya que no están asignados.
     const assigned = [];
     const closed = [];
-    if (data.userTickets) {
-      data.userTickets.edges.forEach(function(ticket) {
+    if (data.userAssignations) {
+      console.log("userAssignations");
+      console.log(data.userAssignations);
+      data.userAssignations.edges.forEach(function(ticket) {
         if (
-          ticket.state.state == "assigned" ||
-          ticket.state.state == "created"
+          ticket.ticket.state.state == "assigned" ||
+          ticket.ticket.state.state == "created"
         ) {
           assigned.push(ticket);
-        } else if (ticket.state.state == "closed") {
+        } else if (ticket.ticket.state.state == "closed") {
           closed.push(ticket);
         }
       });
+    } else {
+      console.log(data);
+      console.log("wekree");
     }
     const ret = { assigned: assigned, closed: closed };
     console.log(ret);
@@ -78,6 +83,7 @@ export default class OrdersScreen extends React.Component {
           if (error) {
             return <ErrorScreen refetch={refetch} navigation={navigation} />;
           } else {
+            console.log(data.userAssignations);
             orders_dict = this.sortOrdersByState(data);
             return (
               <View style={{ margin: 10, padding: 5 }}>
@@ -106,18 +112,20 @@ export default class OrdersScreen extends React.Component {
                     <ScrollView>
                       {orders_dict["assigned"].map(ticket => (
                         <ListItem
-                          key={ticket.id}
-                          title={`Orden de trabajo en ${ticket.client.name}`}
+                          key={ticket.ticket.id}
+                          title={`Orden de trabajo en ${
+                            ticket.ticket.client.name
+                          }`}
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
-                              <Text>ID: {ticket.id}</Text>
+                              <Text>ID: {ticket.ticket.id}</Text>
                             </View>
                           }
                           subtitleStyle={styles.listItemSubtitle}
                           onPress={() =>
                             this.props.navigation.navigate("Order", {
-                              order_id: ticket.id
+                              order_id: ticket.ticket.id
                             })
                           }
                           containerStyle={styles.listItemContainer}
@@ -156,7 +164,9 @@ export default class OrdersScreen extends React.Component {
                       {orders_dict["closed"].map(ticket => (
                         <ListItem
                           key={ticket.id}
-                          title={`Orden de trabajo en ${ticket.client.name}`}
+                          title={`Orden de trabajo en ${
+                            ticket.ticket.client.name
+                          }`}
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
@@ -166,7 +176,7 @@ export default class OrdersScreen extends React.Component {
                           subtitleStyle={styles.listItemSubtitle}
                           onPress={() =>
                             this.props.navigation.navigate("Order", {
-                              order_id: ticket.id
+                              order_id: ticket.ticket.id
                             })
                           }
                           containerStyle={styles.listItemContainer}

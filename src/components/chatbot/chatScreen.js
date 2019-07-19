@@ -66,8 +66,9 @@ class ChatScreen extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props;
-    const chatId = 1;
+    const { navigation, chatId2 } = this.props;
+    console.log(chatId2);
+    const chatId = 1; /* FIXME: debe recibirse en props */
     console.log(`chatID: ${chatId}`);
     return (
       <Query query={MSG_QUERY} variables={{ chatId }}>
