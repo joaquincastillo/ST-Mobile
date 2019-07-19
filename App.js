@@ -135,7 +135,7 @@ const authLink = setContext((_, { headers }) =>
 
 const httpLink = new HttpLink({
   // FIXME: change this when going into production
-  uri: "http://8b5cab03.ngrok.io/graphql"
+  uri: "http://831ebc47.ngrok.io/graphql"
   //uri: "http://170.84.211.53:8000/graphql"
 });
 
@@ -153,7 +153,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deviceToken: null
+      pushToken: null
     };
     this.handleChangeLoginState = this.handleChangeLoginState.bind(this);
   }
@@ -187,7 +187,8 @@ export default class App extends Component {
     // Get the token that uniquely identifies this device
     // const token = await Notifications.getDevicePushTokenAsync();
     const token = await Notifications.getExpoPushTokenAsync();
-    await this.setState({ deviceToken: token });
+    console.log(`El token: ${token}`);
+    await this.setState({ pushToken: token });
   };
 
   handleChangeLoginState(loggedIn = false, jwt) {
@@ -200,14 +201,15 @@ export default class App extends Component {
   }
 
   render() {
-    const { deviceToken } = this.state;
+    const { pushToken } = this.state;
+    console.log(`THE PUSH_TOKEN: ${pushToken}`);
     return (
       <ApolloProvider client={client}>
         <StatusBar barStyle="dark-content" />
         <AppCont
           screenProps={{
             changeLoginState: this.handleChangeLoginState,
-            deviceToken
+            pushToken
           }}
         />
       </ApolloProvider>

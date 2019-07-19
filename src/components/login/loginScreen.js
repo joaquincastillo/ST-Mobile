@@ -75,7 +75,7 @@ class LoginScreen extends React.Component {
     } else {
       this.setState({ error: false, loading: true });
       const { screenProps, navigation, signinUser } = this.props;
-      signinUser(email, password)
+      signinUser(email, password, screenProps.pushToken)
         .then(({ data }) => {
           console.log(data.signIn);
           if (data.signIn) {
@@ -181,16 +181,20 @@ class LoginScreen extends React.Component {
 
 export default graphql(
   gql`
-    mutation signinUser($login: String!, $password: String!) {
-      signIn(login: $login, password: $password) {
+    mutation signinUser(
+      $login: String!
+      $password: String!
+      $pushToken: String
+    ) {
+      signIn(login: $login, password: $password, pushToken: $pushToken) {
         token
       }
     }
   `,
   {
     props: ({ mutate }) => ({
-      signinUser: (login, password) =>
-        mutate({ variables: { login, password } })
+      signinUser: (login, password, pushToken) =>
+        mutate({ variables: { login, password, pushToken } })
     })
   }
 )(LoginScreen);
