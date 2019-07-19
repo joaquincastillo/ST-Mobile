@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { ApolloClient } from "apollo-client";
+import { onError } from "apollo-link-error";
+import { ApolloLink } from "apollo-link";
 
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
@@ -137,8 +139,12 @@ const httpLink = new HttpLink({
   //uri: "http://170.84.211.53:8000/graphql"
 });
 
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
+});
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: ApolloLink.from([errorLink, authLink.concat(httpLink)]),
   cache: new InMemoryCache()
 });
 

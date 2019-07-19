@@ -15,6 +15,7 @@ class SignatureScreen extends React.Component {
 
     this.handleSignature = this.handleSignature.bind(this);
     this.cleanSignature = this.cleanSignature.bind(this);
+    this.onSendSignature = this.onSendSignature.bind(this);
 
     console.log("FIN");
   }
@@ -41,7 +42,7 @@ class SignatureScreen extends React.Component {
         },
         {
           text: "Enviar",
-          onPress: () => console.log(`Firma: ${this.state.signature}`)
+          onPress: () => this.onSendSignature()
         }
       ],
       { cancelable: false }
@@ -49,9 +50,23 @@ class SignatureScreen extends React.Component {
   }
 
   onSendSignature() {
-    const { updateSignature } = this.props;
+    const { createSignature } = this.props;
     const { signature, order_id } = this.state;
-    updateSignature(order_id, signature);
+    console.log(order_id);
+    createSignature(2, signature)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.createSignature) {
+          console.log(data.createSignature);
+        } else {
+          console.log("error clave");
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        console.log("xxx");
+      });
+    console.log("Firma envia3");
   }
 
   render() {
@@ -110,16 +125,17 @@ const styles = StyleSheet.create({
 
 export default graphql(
   gql`
-    mutation updateSignature($id: ID!, $signature: String!) {
-      updateSignature(id: $id, signature: $signature) {
-        token
+    mutation CreateSignature($ticketId: ID!, $signature: String!) {
+      createSignature(ticketId: $ticketId, signature: $signature) {
+        ticketId
+        signature
       }
     }
   `,
   {
     props: ({ mutate }) => ({
-      updateSignature: (id, signature) =>
-        mutate({ variables: { id, signature } })
+      createSignature: (ticketId, signature) =>
+        mutate({ variables: { ticketId, signature } })
     })
   }
 )(SignatureScreen);
