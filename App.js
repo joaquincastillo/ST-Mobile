@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { ApolloClient } from "apollo-client";
+import { onError } from "apollo-link-error";
+import { ApolloLink } from "apollo-link";
 
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
@@ -121,7 +123,8 @@ const authLink = setContext((_, { headers }) =>
       // return the headers to the context so httpLink can read them
       headers: {
         ...headers,
-        JWTACCESSTOKEN: actualHeaders.token ? `${actualHeaders.token}` : ""
+        //JWTACCESSTOKEN: actualHeaders.token ? `${actualHeaders.token}` : "",
+        token: actualHeaders.token ? `${actualHeaders.token}` : ""
       }
     }))
 );
@@ -131,11 +134,17 @@ const authLink = setContext((_, { headers }) =>
 // });
 
 const httpLink = new HttpLink({
-  uri: "http://170.84.211.53:8000/graphql"
+  // FIXME: change this when going into production
+  uri: "http://831ebc47.ngrok.io/graphql"
+  //uri: "http://170.84.211.53:8000/graphql"
+});
+
+const errorLink = onError(({ graphQLErrors }) => {
+  if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message));
 });
 
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: ApolloLink.from([errorLink, authLink.concat(httpLink)]),
   cache: new InMemoryCache()
 });
 
@@ -144,7 +153,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deviceToken: null
+      pushToken: null
     };
     this.handleChangeLoginState = this.handleChangeLoginState.bind(this);
   }
@@ -178,7 +187,8 @@ export default class App extends Component {
     // Get the token that uniquely identifies this device
     // const token = await Notifications.getDevicePushTokenAsync();
     const token = await Notifications.getExpoPushTokenAsync();
-    await this.setState({ deviceToken: token });
+    console.log(`El token: ${token}`);
+    await this.setState({ pushToken: token });
   };
 
   handleChangeLoginState(loggedIn = false, jwt) {
@@ -191,14 +201,15 @@ export default class App extends Component {
   }
 
   render() {
-    const { deviceToken } = this.state;
+    const { pushToken } = this.state;
+    console.log(`THE PUSH_TOKEN: ${pushToken}`);
     return (
       <ApolloProvider client={client}>
         <StatusBar barStyle="dark-content" />
         <AppCont
           screenProps={{
             changeLoginState: this.handleChangeLoginState,
-            deviceToken
+            pushToken
           }}
         />
       </ApolloProvider>

@@ -30,7 +30,7 @@ class DrawerContent extends React.Component {
 
   handleLogOut() {
     const { screenProps, navigation, logOutUser } = this.props;
-    logOutUser(screenProps.deviceToken).then(() => {
+    logOutUser(screenProps.pushToken).then(() => {
       screenProps.changeLoginState(false);
       navigation.navigate('AuthLoading');
     }).catch(() => Alert.alert('Hubo un error de conexión. Inténtalo más tarde'));

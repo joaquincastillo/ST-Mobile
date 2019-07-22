@@ -1,17 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Alert } from "react-native";
+import { graphql } from "react-apollo";
+import gql from "graphql-tag";
 import Signature from "react-native-signature-canvas";
 
-export default class SignatureScreen extends React.Component {
+class SignatureScreen extends React.Component {
   static navigationOptions = {
     title: "Firma digital"
   };
   constructor(props) {
     super(props);
-    this.state = { signature: null };
+    const { order_id } = this.props;
+    this.state = { signature: null, order_id: order_id };
 
     this.handleSignature = this.handleSignature.bind(this);
     this.cleanSignature = this.cleanSignature.bind(this);
+    this.onSendSignature = this.onSendSignature.bind(this);
 
     console.log("FIN");
   }
@@ -38,11 +42,31 @@ export default class SignatureScreen extends React.Component {
         },
         {
           text: "Enviar",
-          onPress: () => this.props.saveSignature(this.state.signature)
+          onPress: () => this.onSendSignature()
         }
       ],
       { cancelable: false }
     );
+  }
+
+  onSendSignature() {
+    const { createSignature } = this.props;
+    const { signature, order_id } = this.state;
+    console.log(order_id);
+    createSignature(2, signature)
+      .then(({ data }) => {
+        console.log(data);
+        if (data.createSignature) {
+          console.log(data.createSignature);
+        } else {
+          console.log("error clave");
+        }
+      })
+      .catch(e => {
+        console.log(e);
+        console.log("xxx");
+      });
+    console.log("Firma envia3");
   }
 
   render() {
@@ -98,3 +122,20 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 });
+
+export default graphql(
+  gql`
+    mutation CreateSignature($ticketId: ID!, $signature: String!) {
+      createSignature(ticketId: $ticketId, signature: $signature) {
+        ticketId
+        signature
+      }
+    }
+  `,
+  {
+    props: ({ mutate }) => ({
+      createSignature: (ticketId, signature) =>
+        mutate({ variables: { ticketId, signature } })
+    })
+  }
+)(SignatureScreen);
