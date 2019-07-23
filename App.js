@@ -138,8 +138,8 @@ const authLink = setContext((_, { headers }) =>
 
 const httpLink = new HttpLink({
   // FIXME: change this when going into production
-  //uri: "http://c18c789c.ngrok.io/graphql"
-  uri: "http://170.84.211.53:8000/graphql"
+  uri: "http://fd577781.ngrok.io/graphql"
+  //uri: "http://170.84.211.53:8000/graphql"
 });
 
 const errorLink = onError(({ graphQLErrors }) => {
