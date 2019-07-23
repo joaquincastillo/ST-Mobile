@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { View, Text, StatusBar, Platform } from "react-native";
+
 import { ApolloClient } from "apollo-client";
 import { onError } from "apollo-link-error";
 import { ApolloLink } from "apollo-link";
@@ -16,7 +18,7 @@ import {
 } from "react-navigation";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo";
-import { StatusBar } from "react-native";
+import NotificationPopup from "react-native-push-notification-popup";
 
 // Screens
 import LoginScreen from "./src/components/login/loginScreen";
@@ -32,7 +34,8 @@ import {
   secondaryColor,
   fontColor,
   fontSelectedColor,
-  selectedColor
+  selectedColor,
+  styles
 } from "./src/components/generalStyle";
 
 // Utils
@@ -135,8 +138,8 @@ const authLink = setContext((_, { headers }) =>
 
 const httpLink = new HttpLink({
   // FIXME: change this when going into production
-  uri: "http://831ebc47.ngrok.io/graphql"
-  //uri: "http://170.84.211.53:8000/graphql"
+  //uri: "http://c18c789c.ngrok.io/graphql"
+  uri: "http://170.84.211.53:8000/graphql"
 });
 
 const errorLink = onError(({ graphQLErrors }) => {
@@ -153,14 +156,37 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pushToken: null
+      pushToken: null,
+      notification: null
     };
     this.handleChangeLoginState = this.handleChangeLoginState.bind(this);
   }
 
-  async componentDidMount() {
-    await this.registerForPushNotificationsAsync();
+  componentWillUnmount() {
+    this.listener && expo.Notifications.removeListener(this.listen);
   }
+
+  listen = ({ origin, data }) => {
+    console.log("cool data", origin, data);
+  };
+
+  async componentWillMount() {
+    this.handleChangeLoginState(false);
+    await this.registerForPushNotificationsAsync();
+    this._notificationSubscription = Notifications.addListener(this.listen);
+    if (Platform.OS === "android") {
+      Expo.Notifications.createChannelAndroidAsync("chat-messages", {
+        name: "Chat messages",
+        sound: true
+      });
+    }
+  }
+
+  _handleNotification = notification => {
+    this.setState({ notification: notification }, () => {
+      console.log(`[PUSH NOTIFICATION] ${this.state.notification.data.sender}`);
+    });
+  };
 
   registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
@@ -205,6 +231,9 @@ export default class App extends Component {
     console.log(`THE PUSH_TOKEN: ${pushToken}`);
     return (
       <ApolloProvider client={client}>
+        <View style={styles.container}>
+          <NotificationPopup ref={ref => (this.popup = ref)} />
+        </View>
         <StatusBar barStyle="dark-content" />
         <AppCont
           screenProps={{
@@ -212,6 +241,15 @@ export default class App extends Component {
             pushToken
           }}
         />
+
+        {this.state.notification ? (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text>Origin: {this.state.notification.data.sender}</Text>
+            <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
+          </View>
+        ) : null}
       </ApolloProvider>
     );
   }

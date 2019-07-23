@@ -4,27 +4,28 @@
     "slug": "ST-mobile-app",
     "privacy": "public",
     "sdkVersion": "33.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/st-computacion.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/st-computacion.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "notification": {
+      "icon": "./assets/images/st-computacion.png"
+    },
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.stcomputacion.tecnicos"
+    },
+    "android": {
+      "package": "com.stcomputacion.tecnicos"
     }
   }
 }
