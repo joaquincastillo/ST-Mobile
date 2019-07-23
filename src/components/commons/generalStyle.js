@@ -115,6 +115,15 @@ const generalStyles = StyleSheet.create({
     alignSelf: "center",
     marginBottom: -25,
     paddingBottom: -25
+  },
+  container: {
+    flex: 3,
+    marginTop: "20%",
+    alignItems: "center",
+    alignContent: "flex-start",
+    justifyContent: "center",
+    marginHorizontal: "10%",
+    borderRadius: 4
   }
 });
 
