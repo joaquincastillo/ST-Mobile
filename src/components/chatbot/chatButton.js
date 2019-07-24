@@ -27,8 +27,8 @@ class chatButton extends React.Component {
 
   openChat() {
     console.log("yajuu0");
-    const { navigation } = this.props;
-    navigation.navigate("Chat");
+    const { navigation, me, chatId } = this.props;
+    navigation.navigate("Chat", { me: me, chatId: chatId });
     console.log("yajuuuu");
   }
 

@@ -48,15 +48,27 @@ class ChatScreen extends React.Component {
   }
 
   format_messages(messages) {
+    const { navigation } = this.props;
+    const me = navigation.getParam("me");
+    console.log(`____ME_______: ${me}`);
     const msg_list = [];
+    const usernames = {};
     messages.forEach(function(message) {
+      let user_id = 1;
+      let username = me;
+      if (message.user.username != me) {
+        user_id = 2;
+        username = message.username;
+        usernames[username] = true;
+      }
+
       const msg = {
-        _id: 2,
+        _id: message.id,
         text: message.text,
         createdAt: message.createdAt,
         user: {
-          _id: 1,
-          name: "Usuario",
+          _id: user_id,
+          name: message.username,
           avatar: "https://placeimg.com/140/140/any"
         }
       };
@@ -66,9 +78,9 @@ class ChatScreen extends React.Component {
   }
 
   render() {
-    const { navigation, chatId2 } = this.props;
-    console.log(chatId2);
-    const chatId = 1; /* FIXME: debe recibirse en props */
+    const { navigation } = this.props;
+    const chatId = navigation.getParam("chatId");
+    console.log(`CHAT_ID: ${chatId}`);
     console.log(`chatID: ${chatId}`);
     return (
       <Query query={MSG_QUERY} variables={{ chatId }}>
