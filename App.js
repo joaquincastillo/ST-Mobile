@@ -183,9 +183,16 @@ export default class App extends Component {
   }
 
   _handleNotification = notification => {
-    this.setState({ notification: notification }, () => {
-      console.log(`[PUSH NOTIFICATION] ${this.state.notification.data.sender}`);
-    });
+    this.setState({ notification: notification }, () => {});
+
+    const { type, ticketId } = notification.data;
+    const { origin } = notification;
+
+    if (origin === "selected") {
+      this.props.navigation.push("Order", {
+        ticketId
+      });
+    }
   };
 
   registerForPushNotificationsAsync = async () => {

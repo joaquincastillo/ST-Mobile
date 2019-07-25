@@ -2,9 +2,11 @@ import React from "react";
 import { Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { Query } from "react-apollo";
 import { ListItem, Divider } from "react-native-elements";
-import { Ionicons as Icon } from "@expo/vector-icons";
+//import { Ionicons as Icon } from "@expo/vector-icons";
 import Collapsible from "react-native-collapsible";
 import ChatButton from "../chatbot/chatButton";
+import Icon from "react-native-vector-icons/Entypo";
+
 import LoadingScreen from "../commons/LoadingScreen";
 import ErrorScreen from "../commons/ErrorScreen";
 
@@ -169,7 +171,21 @@ export default class OrdersScreen extends React.Component {
                       ]}
                     >
                       <Text style={styles.headerText}>
-                        {"Tickets asignados"}
+                        {collapsedAssigned ? (
+                          <Icon
+                            name="chevron-with-circle-right"
+                            size={30}
+                            color="#249"
+                          />
+                        ) : (
+                          <Icon
+                            name="chevron-with-circle-down"
+                            size={30}
+                            color="#249"
+                          />
+                        )}
+
+                        {" Tickets asignados"}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -220,7 +236,20 @@ export default class OrdersScreen extends React.Component {
                       ]}
                     >
                       <Text style={styles.headerText}>
-                        {"Tickets con visita coordinada"}
+                        {collapsedScheduled ? (
+                          <Icon
+                            name="chevron-with-circle-right"
+                            size={30}
+                            color="#249"
+                          />
+                        ) : (
+                          <Icon
+                            name="chevron-with-circle-down"
+                            size={30}
+                            color="#249"
+                          />
+                        )}
+                        {" Tickets con visita coordinada"}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -272,7 +301,20 @@ export default class OrdersScreen extends React.Component {
                       ]}
                     >
                       <Text style={styles.headerText}>
-                        {"Tickets en progreso"}
+                        {collapsedScheduled ? (
+                          <Icon
+                            name="chevron-with-circle-right"
+                            size={30}
+                            color="#249"
+                          />
+                        ) : (
+                          <Icon
+                            name="chevron-with-circle-down"
+                            size={30}
+                            color="#249"
+                          />
+                        )}
+                        {" Tickets en progreso"}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -323,7 +365,20 @@ export default class OrdersScreen extends React.Component {
                       ]}
                     >
                       <Text style={styles.headerText}>
-                        {"Tickets terminados"}
+                        {collapsedFinished ? (
+                          <Icon
+                            name="chevron-with-circle-right"
+                            size={30}
+                            color="#249"
+                          />
+                        ) : (
+                          <Icon
+                            name="chevron-with-circle-down"
+                            size={30}
+                            color="#249"
+                          />
+                        )}
+                        {" Tickets terminados"}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -374,7 +429,20 @@ export default class OrdersScreen extends React.Component {
                       ]}
                     >
                       <Text style={styles.headerText}>
-                        {"Tickets terminados"}
+                        {collapsedClosed ? (
+                          <Icon
+                            name="chevron-with-circle-right"
+                            size={30}
+                            color="#249"
+                          />
+                        ) : (
+                          <Icon
+                            name="chevron-with-circle-down"
+                            size={30}
+                            color="#249"
+                          />
+                        )}
+                        {" Tickets cerrados"}
                       </Text>
                     </View>
                   </TouchableOpacity>

@@ -1,10 +1,12 @@
 import React from "react";
 import { View, TouchableOpacity, Text, Alert } from "react-native";
+import { ListItem, Divider } from "react-native-elements";
 import ChatButton from "../chatbot/chatButton";
 import SignatureButton from "../signature/signatureButton";
 import { Query } from "react-apollo";
 import LoadingScreen from "../commons/LoadingScreen";
 import ErrorScreen from "../commons/ErrorScreen";
+import Icon from "react-native-vector-icons/Entypo";
 import TICKET_QUERY from "./TICKET_QUERY";
 const { styles } = require("./styles");
 
@@ -50,34 +52,102 @@ class OrderScreen extends React.Component {
                 <View>
                   <View>
                     <View style={styles.itemContainer}>
-                      <Text style={styles.itemText}>Nombre Cliente:</Text>
-                      <Text>{` ${data.ticket.client.name}`}</Text>
+                      <Text style={styles.itemText}>
+                        <Icon name="user" size={30} color="#249" />
+                        {" Nombre Cliente:"}
+                      </Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.client.name
+                      }`}</Text>
                     </View>
-                    <View style={styles.itemContainer}>
-                      <Text style={styles.itemText}>Teléfono:</Text>
-                      <Text>{` ${data.ticket.client.phone}`}</Text>
-                    </View>
-                    <View style={styles.itemContainer}>
-                      <Text style={styles.itemText}>Dirección:</Text>
-                      <Text>{` ${data.ticket.client.address}`}</Text>
-                    </View>
-                    <View style={styles.itemContainer}>
-                      <Text style={styles.itemText}>Prioridad:</Text>
-                      <Text>{` ${data.ticket.priority}`}</Text>
-                    </View>
-                    <View style={styles.itemContainer}>
-                      <Text style={styles.itemText}>Estado del ticket:</Text>
-                      <Text>{` ${data.ticket.state.state}`}</Text>
-                    </View>
-                    <View style={styles.itemContainer}>
-                      <Text style={styles.itemText}>Dueño de ticket:</Text>
-                      <Text>{` ${data.ticket.owner.username}`}</Text>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 8, backgroundColor: "white" }}
+                      />
                     </View>
                     <View style={styles.itemContainer}>
                       <Text style={styles.itemText}>
-                        Teléfono dueño de ticket:
+                        <Icon name="phone" size={30} color="#249" />
+                        {" Teléfono:"}
                       </Text>
-                      <Text>{` ${data.ticket.owner.phone}`}</Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.client.phone
+                      }`}</Text>
+                    </View>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 8, backgroundColor: "white" }}
+                      />
+                    </View>
+                    <View style={styles.itemContainer}>
+                      <Text style={styles.itemText}>
+                        <Icon name="location-pin" size={30} color="#249" />
+                        {" Dirección:"}
+                      </Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.client.address
+                      }`}</Text>
+                    </View>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 8, backgroundColor: "white" }}
+                      />
+                    </View>
+                    <View style={styles.itemContainer}>
+                      <Text style={styles.itemText}>
+                        <Icon name="bell" size={30} color="#249" />
+                        {" Prioridad:"}
+                      </Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.priority
+                      }`}</Text>
+                    </View>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 8, backgroundColor: "white" }}
+                      />
+                    </View>
+                    <View style={styles.itemContainer}>
+                      <Text style={styles.itemText}>
+                        <Icon name="ticket" size={30} color="#249" />
+                        {" Estado del ticket:"}
+                      </Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.state.state
+                      }`}</Text>
+                    </View>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 8, backgroundColor: "white" }}
+                      />
+                    </View>
+                    <View style={styles.itemContainer}>
+                      <Text style={styles.itemText}>
+                        <Icon name="v-card" size={30} color="#249" />
+                        {" Dueño de ticket:"}
+                      </Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.owner.username
+                      }`}</Text>
+                    </View>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 8, backgroundColor: "white" }}
+                      />
+                    </View>
+                    <View style={styles.itemContainer}>
+                      <Text style={styles.itemText}>
+                        <Icon name="landline" size={30} color="#249" />
+                        {" Teléfono dueño de ticket:"}
+                      </Text>
+                      <Text style={styles.itemTextValue}>{` ${
+                        data.ticket.owner.phone
+                      }`}</Text>
+                    </View>
+                    <View style={styles.dividerView}>
+                      <Divider
+                        style={{ height: 16, backgroundColor: "white" }}
+                      />
                     </View>
                   </View>
                 </View>
