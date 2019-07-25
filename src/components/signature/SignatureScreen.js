@@ -3,6 +3,11 @@ import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
 import Signature from "react-native-signature-canvas";
+import {
+  GiftedChat,
+  GiftedChatProps,
+  GiftedAvatar
+} from "react-native-gifted-chat";
 
 class SignatureScreen extends React.Component {
   static navigationOptions = {
@@ -11,13 +16,14 @@ class SignatureScreen extends React.Component {
   constructor(props) {
     super(props);
     const { order_id } = this.props;
-    this.state = { signature: null, order_id: order_id };
+    this.state = { signature: null, order_id: order_id, coordinates: null };
 
     this.handleSignature = this.handleSignature.bind(this);
     this.cleanSignature = this.cleanSignature.bind(this);
     this.onSendSignature = this.onSendSignature.bind(this);
-
-    console.log("FIN");
+    this.error = this.error.bind(this);
+    this.success = this.success.bind(this);
+    this.getPosition = this.getPosition.bind(this);
   }
 
   handleSignature = signature => {
@@ -50,14 +56,29 @@ class SignatureScreen extends React.Component {
   }
 
   onSendSignature() {
-    const { createSignature } = this.props;
-    const { signature, order_id } = this.state;
-    console.log(order_id);
-    createSignature(2, signature)
+    const { createSignature, navigation } = this.props;
+    const order_id = navigation.getParam("order_id");
+    const { signature } = this.state;
+    console.log(`[SIGNATURE] order_id ${order_id}`);
+    this.getPosition();
+    const { coordinates } = this.state;
+
+    console.log(`the state: ${Object.getOwnPropertyNames(this.state)}`);
+    console.log(this.state.order_id);
+    console.log(this.state.signature);
+    console.log(this.state.coordinates);
+
+    createSignature(
+      order_id,
+      signature,
+      this.state.coordinates.latitude,
+      this.state.coordinates.longitude
+    )
       .then(({ data }) => {
         console.log(data);
         if (data.createSignature) {
           console.log(data.createSignature);
+          navigation.navigate("Orders");
         } else {
           console.log("error clave");
         }
@@ -69,12 +90,59 @@ class SignatureScreen extends React.Component {
     console.log("Firma envia3");
   }
 
+  getPosition() {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+  }
+
+  success(pos) {
+    const coords = pos.coords;
+    console.log("Your current position is:");
+    console.log("Latitude : " + coords.latitude);
+    console.log("Longitude: " + coords.longitude);
+    console.log("More or less " + coords.accuracy + " meters.");
+
+    const crd = {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      accuracy: coords.accuracy
+    };
+
+    this.setState({ coordinates: crd }, () =>
+      console.log("[SIGNATURE] position defined")
+    );
+    console.log("the coordinates yo bitches: ");
+    console.log(this.state.coordinates);
+  }
+
+  error(err) {
+    console.warn("ERROR(" + err.code + "): " + err.message);
+    crd = {
+      latitude: "unknown",
+      longitude: "unknown",
+      accuracy: "undefined"
+    };
+    this.setState({ coordinates: crd }, () =>
+      console.log("[SIGNATURE] position cannot be defined")
+    );
+  }
+
+  componentDidMount() {
+    this.getPosition();
+    console.log(`COORDINATES DEFINED: ${this.state.coordinates}`);
+  }
+
   render() {
     const style = `.m-signature-pad--footer
     .button {
       background-color: #259;
       color: #FFF;
     }`;
+
     return (
       <View style={{ flex: 1 }}>
         {this.state.signature ? (
@@ -125,10 +193,22 @@ const styles = StyleSheet.create({
 
 export default graphql(
   gql`
-    mutation CreateSignature($ticketId: ID!, $signature: String!) {
-      createSignature(ticketId: $ticketId, signature: $signature) {
+    mutation CreateSignature(
+      $ticketId: ID!
+      $signature: String!
+      $lat: Float
+      $lon: Float
+    ) {
+      createSignature(
+        ticketId: $ticketId
+        signature: $signature
+        lat: $lat
+        lon: $lon
+      ) {
         ticketId
         signature
+        lat
+        lon
       }
     }
   `,

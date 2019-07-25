@@ -26,7 +26,7 @@ import OrdersScreen from "./src/components/orders/OrdersScreen";
 import AuthLoadingScreen from "./src/components/login/AuthStartScreen";
 
 import OrderScreen from "./src/components/orders/OrderScreen";
-import ChatScreen from "./src/components/chatbot/chatScreen";
+import ChatQueryScreen from "./src/components/chatbot/chatQueryScreen";
 import SignatureScreen from "./src/components/signature/SignatureScreen";
 
 import {
@@ -54,7 +54,7 @@ const LoginStack = createStackNavigator({
 const OrdersStack = createStackNavigator({
   Orders: { screen: OrdersScreen },
   Order: { screen: OrderScreen },
-  Chat: { screen: ChatScreen },
+  Chat: { screen: ChatQueryScreen },
   Signature: { screen: SignatureScreen }
 });
 
@@ -138,8 +138,8 @@ const authLink = setContext((_, { headers }) =>
 
 const httpLink = new HttpLink({
   // FIXME: change this when going into production
-  uri: "http://fd577781.ngrok.io/graphql"
-  //uri: "http://170.84.211.53:8000/graphql"
+  //uri: "http://fd577781.ngrok.io/graphql"
+  uri: "http://170.84.211.53:8000/graphql"
 });
 
 const errorLink = onError(({ graphQLErrors }) => {
@@ -171,7 +171,7 @@ export default class App extends Component {
   };
 
   async componentWillMount() {
-    this.handleChangeLoginState(false);
+    //this.handleChangeLoginState(false);
     await this.registerForPushNotificationsAsync();
     this._notificationSubscription = Notifications.addListener(this.listen);
     if (Platform.OS === "android") {
