@@ -26,8 +26,8 @@ class SignatureButton extends React.Component {
   }
 
   openSignature() {
-    const { navigation } = this.props;
-    navigation.navigate("Signature");
+    const { navigation, order_id } = this.props;
+    navigation.navigate("Signature", { order_id: order_id });
   }
 
   render() {
