@@ -8,6 +8,7 @@ import LoadingScreen from "../commons/LoadingScreen";
 import ErrorScreen from "../commons/ErrorScreen";
 import Icon from "react-native-vector-icons/Entypo";
 import TICKET_QUERY from "./TICKET_QUERY";
+import Communications from "react-native-communications";
 const { styles } = require("./styles");
 
 class OrderScreen extends React.Component {
@@ -70,9 +71,18 @@ class OrderScreen extends React.Component {
                         <Icon name="phone" size={30} color="#249" />
                         {" Teléfono:"}
                       </Text>
-                      <Text style={styles.itemTextValue}>{` ${
-                        data.ticket.client.phone
-                      }`}</Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          Communications.phonecall(
+                            data.ticket.client.phone,
+                            true
+                          )
+                        }
+                      >
+                        <Text style={styles.itemTextValue}>{` ${
+                          data.ticket.client.phone
+                        }`}</Text>
+                      </TouchableOpacity>
                     </View>
                     <View style={styles.dividerView}>
                       <Divider
@@ -140,9 +150,18 @@ class OrderScreen extends React.Component {
                         <Icon name="landline" size={30} color="#249" />
                         {" Teléfono dueño de ticket:"}
                       </Text>
-                      <Text style={styles.itemTextValue}>{` ${
-                        data.ticket.owner.phone
-                      }`}</Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          Communications.phonecall(
+                            data.ticket.owner.phone,
+                            true
+                          )
+                        }
+                      >
+                        <Text style={styles.itemTextValue}>{` ${
+                          data.ticket.owner.phone
+                        }`}</Text>
+                      </TouchableOpacity>
                     </View>
                     <View style={styles.dividerView}>
                       <Divider

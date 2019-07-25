@@ -192,7 +192,16 @@ export default class OrdersScreen extends React.Component {
                   <Collapsible collapsed={collapsedAssigned} align="top">
                     {orders_dict["assigned"].length === 0 ? (
                       <View>
-                        <Text>No tienes tickets asignados abiertos</Text>
+                        <View>
+                          <Text style={styles.itemText}>
+                            No tienes tickets asignados abiertos
+                          </Text>
+                        </View>
+                        <View style={styles.dividerView}>
+                          <Divider
+                            style={{ height: 4, backgroundColor: "white" }}
+                          />
+                        </View>
                       </View>
                     ) : null}
                     <ScrollView>
@@ -205,7 +214,9 @@ export default class OrdersScreen extends React.Component {
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
-                              <Text>ID: {ticket.ticket.id}</Text>
+                              <Text style={styles.itemText}>
+                                ID: {ticket.ticket.id}
+                              </Text>
                             </View>
                           }
                           subtitleStyle={styles.listItemSubtitle}
@@ -256,9 +267,16 @@ export default class OrdersScreen extends React.Component {
                   <Collapsible collapsed={collapsedScheduled} align="top">
                     {orders_dict["scheduled"].length === 0 ? (
                       <View>
-                        <Text>
-                          No tienes tickets con visita agendada actualmente
-                        </Text>
+                        <View>
+                          <Text style={styles.itemTextValue}>
+                            No tienes tickets con visita agendada actualmente
+                          </Text>
+                        </View>
+                        <View style={styles.dividerView}>
+                          <Divider
+                            style={{ height: 4, backgroundColor: "white" }}
+                          />
+                        </View>
                       </View>
                     ) : null}
                     <ScrollView>
@@ -271,7 +289,9 @@ export default class OrdersScreen extends React.Component {
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
-                              <Text>ID: {ticket.ticket.id}</Text>
+                              <Text style={styles.itemText}>
+                                ID: {ticket.ticket.id}
+                              </Text>
                             </View>
                           }
                           subtitleStyle={styles.listItemSubtitle}
@@ -321,7 +341,16 @@ export default class OrdersScreen extends React.Component {
                   <Collapsible collapsed={collapsedInProgress} align="top">
                     {orders_dict["in_progress"].length === 0 ? (
                       <View>
-                        <Text>No tienes en progreso actualmente</Text>
+                        <View>
+                          <Text style={styles.itemText}>
+                            No tienes en progreso actualmente
+                          </Text>
+                        </View>
+                        <View style={styles.dividerView}>
+                          <Divider
+                            style={{ height: 4, backgroundColor: "white" }}
+                          />
+                        </View>
                       </View>
                     ) : null}
                     <ScrollView>
@@ -334,7 +363,9 @@ export default class OrdersScreen extends React.Component {
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
-                              <Text>ID: {ticket.ticket.id}</Text>
+                              <Text style={styles.itemText}>
+                                ID: {ticket.ticket.id}
+                              </Text>
                             </View>
                           }
                           subtitleStyle={styles.listItemSubtitle}
@@ -385,7 +416,9 @@ export default class OrdersScreen extends React.Component {
                   <Collapsible collapsed={collapsedFinished} align="top">
                     {orders_dict["finished"].length === 0 ? (
                       <View>
-                        <Text>No tienes tickets terminados.</Text>
+                        <Text style={styles.itemText}>
+                          No tienes tickets terminados.
+                        </Text>
                       </View>
                     ) : null}
                     <ScrollView>
@@ -398,7 +431,9 @@ export default class OrdersScreen extends React.Component {
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
-                              <Text>ID: {ticket.ticket.id}</Text>
+                              <Text style={styles.itemText}>
+                                ID: {ticket.ticket.id}
+                              </Text>
                             </View>
                           }
                           subtitleStyle={styles.listItemSubtitle}
@@ -449,7 +484,9 @@ export default class OrdersScreen extends React.Component {
                   <Collapsible collapsed={collapsedClosed} align="top">
                     {orders_dict["closed"].length === 0 ? (
                       <View>
-                        <Text>No tienes tickets cerrados</Text>
+                        <Text style={styles.itemText}>
+                          No tienes tickets cerrados
+                        </Text>
                       </View>
                     ) : null}
                     <ScrollView>
@@ -462,7 +499,9 @@ export default class OrdersScreen extends React.Component {
                           titleStyle={styles.listItemTitle}
                           subtitle={
                             <View style={{ flexDirection: "row" }}>
-                              <Text>ID: {ticket.ticket.id}</Text>
+                              <Text style={styles.itemText}>
+                                ID: {ticket.ticket.id}
+                              </Text>
                             </View>
                           }
                           subtitleStyle={styles.listItemSubtitle}
