@@ -14,7 +14,37 @@ const { styles } = require("./styles");
 
 class OrderScreen extends React.Component {
   static navigationOptions = {
-    title: "Ticket de trabajo"
+    title: "Ticket de trabajo",
+    headerRight: (
+      <View style={{ margin: 10 }}>
+        <TouchableOpacity
+          onPress={() =>
+            Alert.alert(
+              "¿Cerrar sesión?",
+              "",
+              [
+                {
+                  text: "Cancelar",
+                  onPress: () => console.log("Cancel Pressed")
+                },
+                {
+                  text: "Cerrar sesión",
+                  onPress: function logout() {
+                    navigation.getScreenProps().changeLoginState();
+                    navigation.navigate("Auth");
+                  }
+                }
+              ],
+              { cancelable: false }
+            )
+          }
+        >
+          <Text>
+            <Icon name="log-out" size={35} color="red" />
+          </Text>
+        </TouchableOpacity>
+      </View>
+    )
   };
 
   constructor(props) {

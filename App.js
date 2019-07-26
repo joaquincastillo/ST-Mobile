@@ -160,6 +160,7 @@ export default class App extends Component {
       notification: null
     };
     this.handleChangeLoginState = this.handleChangeLoginState.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
   }
 
   componentWillUnmount() {
@@ -224,9 +225,17 @@ export default class App extends Component {
     await this.setState({ pushToken: token });
   };
 
-  handleChangeLoginState(loggedIn = false, jwt) {
+  handleLogOut() {
+    const { screenProps, navigation } = this.props;
+    this.handleChangeLoginState(false);
+    navigation.navigate("AuthLoading");
+    // FIXME: Se debería hacer la muatción para eliminar el push token del server
+  }
+
+  handleChangeLoginState(loggedIn = false, token) {
+    console.log("CHANGING LOGIN STATE TO [false]");
     if (loggedIn) {
-      signIn(jwt);
+      signIn(token);
     } else {
       client.resetStore();
       signOut();
@@ -245,7 +254,8 @@ export default class App extends Component {
         <AppCont
           screenProps={{
             changeLoginState: this.handleChangeLoginState,
-            pushToken
+            pushToken,
+            handleLogOut: this.handleLogOut
           }}
         />
 

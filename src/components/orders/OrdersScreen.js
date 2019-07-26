@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Query } from "react-apollo";
 import { ListItem, Divider } from "react-native-elements";
 //import { Ionicons as Icon } from "@expo/vector-icons";
@@ -14,8 +14,40 @@ const { styles } = require("./styles");
 import MY_TICKETS_QUERY from "./MY_TICKETS_QUERY";
 
 export default class OrdersScreen extends React.Component {
-  static navigationOptions = {
-    title: "Mis Ordenes de Trabajo"
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: "Mis Ordenes de Trabajo",
+      headerRight: (
+        <View style={{ margin: 10 }}>
+          <TouchableOpacity
+            onPress={() =>
+              Alert.alert(
+                "¿Cerrar sesión?",
+                "",
+                [
+                  {
+                    text: "Cancelar",
+                    onPress: () => console.log("Cancel Pressed")
+                  },
+                  {
+                    text: "Cerrar sesión",
+                    onPress: function logout() {
+                      navigation.getScreenProps().changeLoginState();
+                      navigation.navigate("Auth");
+                    }
+                  }
+                ],
+                { cancelable: false }
+              )
+            }
+          >
+            <Text>
+              <Icon name="log-out" size={35} color="red" />
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )
+    };
   };
 
   constructor(props) {
@@ -150,7 +182,7 @@ export default class OrdersScreen extends React.Component {
       <Query
         query={MY_TICKETS_QUERY}
         variables={{ userId }}
-        fetchPolicy={"no-cache"}
+        fetchPolicy={"no-cache"} /* TODO: Verificar esto */
       >
         {({ loading, error, data, refetch }) => {
           if (loading) {
