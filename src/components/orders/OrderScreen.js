@@ -9,6 +9,7 @@ import ErrorScreen from "../commons/ErrorScreen";
 import Icon from "react-native-vector-icons/Entypo";
 import TICKET_QUERY from "./TICKET_QUERY";
 import Communications from "react-native-communications";
+import openMap from "react-native-open-maps";
 const { styles } = require("./styles");
 
 class OrderScreen extends React.Component {
@@ -94,9 +95,18 @@ class OrderScreen extends React.Component {
                         <Icon name="location-pin" size={30} color="#249" />
                         {" Dirección:"}
                       </Text>
-                      <Text style={styles.itemTextValue}>{` ${
-                        data.ticket.client.address
-                      }`}</Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          openMap({
+                            query: data.ticket.client.address,
+                            end: data.ticket.client.address
+                          })
+                        }
+                      >
+                        <Text style={styles.itemTextValue}>{` ${
+                          data.ticket.client.address
+                        }`}</Text>
+                      </TouchableOpacity>
                     </View>
                     <View style={styles.dividerView}>
                       <Divider

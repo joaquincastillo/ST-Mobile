@@ -147,7 +147,11 @@ export default class OrdersScreen extends React.Component {
     const { navigation } = this.props;
     const userId = 3;
     return (
-      <Query query={MY_TICKETS_QUERY} variables={{ userId }}>
+      <Query
+        query={MY_TICKETS_QUERY}
+        variables={{ userId }}
+        fetchPolicy={"no-cache"}
+      >
         {({ loading, error, data, refetch }) => {
           if (loading) {
             return <LoadingScreen />;
