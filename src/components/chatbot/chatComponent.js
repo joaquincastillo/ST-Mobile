@@ -16,9 +16,9 @@ class ChatComponent extends React.Component {
     state = {
       messages: this.props.messages,
       coordinates: {
-        longitude: "unknown",
-        latitude: "unknown",
-        accuracy: "undefined"
+        longitude: null,
+        latitude: null,
+        accuracy: null
       }
     };
 
@@ -73,9 +73,9 @@ class ChatComponent extends React.Component {
   error(err) {
     console.warn("ERROR(" + err.code + "): " + err.message);
     crd = {
-      latitude: "unknown",
-      longitude: "unknown",
-      accuracy: "undefined"
+      latitude: null,
+      longitude: null,
+      accuracy: null
     };
     this.setState({ coordinates: crd }, () =>
       console.log("[CHAT] position cannot be defined")
