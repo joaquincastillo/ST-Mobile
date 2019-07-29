@@ -63,7 +63,6 @@ class SignatureScreen extends React.Component {
     this.getPosition();
     const { coordinates } = this.state;
 
-    console.log(`the state: ${Object.getOwnPropertyNames(this.state)}`);
     console.log(this.state.order_id);
     console.log(this.state.signature);
     console.log(this.state.coordinates);
@@ -78,7 +77,7 @@ class SignatureScreen extends React.Component {
         console.log(data);
         if (data.createSignature) {
           console.log(data.createSignature);
-          navigation.navigate("Orders");
+          navigation.navigate("Orders", { reload: true });
         } else {
           console.log("error clave");
         }

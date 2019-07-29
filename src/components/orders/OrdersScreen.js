@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Query } from "react-apollo";
-import { ListItem, Divider } from "react-native-elements";
+import { ListItem, Divider, Badge } from "react-native-elements";
 //import { Ionicons as Icon } from "@expo/vector-icons";
 import Collapsible from "react-native-collapsible";
 import ChatButton from "../chatbot/chatButton";
@@ -53,9 +53,9 @@ export default class OrdersScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      collapsedAssigned: false,
-      collapsedScheduled: false,
-      collapsedInProgress: false,
+      collapsedAssigned: true,
+      collapsedScheduled: true,
+      collapsedInProgress: true,
       collapsedFinished: true,
       collapsedClosed: true
     };
@@ -112,11 +112,6 @@ export default class OrdersScreen extends React.Component {
         collapsedClosed: !collapsedClosed
       });
     }
-  };
-
-  toggleExpandedScheduled = () => {
-    const { collapsedFinished } = this.state;
-    this.setState({ collapsedFini: !collapsedFinished });
   };
 
   toggleExpandedScheduled = () => {
@@ -182,7 +177,7 @@ export default class OrdersScreen extends React.Component {
       <Query
         query={MY_TICKETS_QUERY}
         variables={{ userId }}
-        fetchPolicy={"no-cache"} /* TODO: Verificar esto */
+        pollInterval={10000}
       >
         {({ loading, error, data, refetch }) => {
           if (loading) {
@@ -203,6 +198,7 @@ export default class OrdersScreen extends React.Component {
                     <View
                       style={[
                         styles.header,
+                        { flexDirection: "row" },
                         { borderBottomWidth: collapsedAssigned ? 0 : 1 }
                       ]}
                     >
@@ -223,6 +219,12 @@ export default class OrdersScreen extends React.Component {
 
                         {" Tickets asignados"}
                       </Text>
+                      {collapsedAssigned && orders_dict["assigned"].length ? (
+                        <Badge
+                          value={orders_dict["assigned"].length}
+                          status="primary"
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                   <Collapsible collapsed={collapsedAssigned} align="top">
@@ -279,6 +281,7 @@ export default class OrdersScreen extends React.Component {
                     <View
                       style={[
                         styles.header,
+                        { flexDirection: "row" },
                         { borderBottomWidth: collapsedScheduled ? 0 : 1 }
                       ]}
                     >
@@ -298,6 +301,12 @@ export default class OrdersScreen extends React.Component {
                         )}
                         {" Tickets con visita coordinada"}
                       </Text>
+                      {collapsedScheduled && orders_dict["scheduled"].length ? (
+                        <Badge
+                          value={orders_dict["scheduled"].length}
+                          status="primary"
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                   <Collapsible collapsed={collapsedScheduled} align="top">
@@ -353,6 +362,7 @@ export default class OrdersScreen extends React.Component {
                     <View
                       style={[
                         styles.header,
+                        { flexDirection: "row" },
                         { borderBottomWidth: collapsedInProgress ? 0 : 1 }
                       ]}
                     >
@@ -372,6 +382,13 @@ export default class OrdersScreen extends React.Component {
                         )}
                         {" Tickets en progreso"}
                       </Text>
+                      {collapsedInProgress &&
+                      orders_dict["in_progress"].length ? (
+                        <Badge
+                          value={orders_dict["in_progress"].length}
+                          status="primary"
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                   <Collapsible collapsed={collapsedInProgress} align="top">
@@ -428,6 +445,7 @@ export default class OrdersScreen extends React.Component {
                     <View
                       style={[
                         styles.header,
+                        { flexDirection: "row" },
                         { borderBottomWidth: collapsedFinished ? 0 : 1 }
                       ]}
                     >
@@ -447,6 +465,12 @@ export default class OrdersScreen extends React.Component {
                         )}
                         {" Tickets terminados"}
                       </Text>
+                      {collapsedFinished && orders_dict["finished"].length ? (
+                        <Badge
+                          value={orders_dict["finished"].length}
+                          status="primary"
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                   <Collapsible collapsed={collapsedFinished} align="top">
@@ -496,6 +520,7 @@ export default class OrdersScreen extends React.Component {
                     <View
                       style={[
                         styles.header,
+                        { flexDirection: "row" },
                         { borderBottomWidth: collapsedClosed ? 0 : 1 }
                       ]}
                     >
@@ -515,6 +540,12 @@ export default class OrdersScreen extends React.Component {
                         )}
                         {" Tickets cerrados"}
                       </Text>
+                      {collapsedClosed && orders_dict["closed"].length ? (
+                        <Badge
+                          value={orders_dict["closed"].length}
+                          status="primary"
+                        />
+                      ) : null}
                     </View>
                   </TouchableOpacity>
                   <Collapsible collapsed={collapsedClosed} align="top">
