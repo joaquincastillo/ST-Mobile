@@ -1,5 +1,15 @@
 import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Keyboard,
+  KeyboardAvoidingView,
+  Animated,
+  Platform
+} from "react-native";
+import KeyboardSpacer from "react-native-keyboard-spacer";
+
 import {
   GiftedChat,
   GiftedChatProps,
@@ -7,6 +17,9 @@ import {
 } from "react-native-gifted-chat";
 import { graphql } from "react-apollo";
 import gql from "graphql-tag";
+import MSG_QUERY from "./MSG_QUERY";
+
+const { styles } = require("./styles");
 
 class ChatComponent extends React.Component {
   constructor(props) {
@@ -48,6 +61,10 @@ class ChatComponent extends React.Component {
 
   componentDidMount() {
     //this.getPosition();
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({ messages: props.messages });
   }
 
   success(pos) {
@@ -169,23 +186,7 @@ export default graphql(
           variables: { text, chatId, lat, lon },
           refetchQueries: [
             {
-              query: gql`
-                query Messages($chatId: ID!) {
-                  messages(chatId: $chatId) {
-                    edges {
-                      text
-                      createdAt
-                      user {
-                        username
-                      }
-                    }
-                    pageInfo {
-                      hasNextPage
-                      endCursor
-                    }
-                  }
-                }
-              `,
+              query: MSG_QUERY,
               variables: { chatId: chatId }
             }
           ]

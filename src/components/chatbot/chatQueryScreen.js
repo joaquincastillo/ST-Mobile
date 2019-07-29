@@ -1,6 +1,12 @@
 import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
-
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  KeyboardAvoidingView,
+  Platform
+} from "react-native";
+import KeyboardSpacer from "react-native-keyboard-spacer";
 import { Query } from "react-apollo";
 import ChatComponent from "./chatComponent";
 import LoadingScreen from "../commons/LoadingScreen";
@@ -63,26 +69,29 @@ export default class ChatQueryScreen extends React.Component {
     const chatId = navigation.getParam("chatId");
     console.log(`CHAT_ID: ${chatId}`);
     return (
-      <Query query={MSG_QUERY} variables={{ chatId }} fetchPolicy={"no-cache"}>
-        {({ loading, error, data, refetch }) => {
-          if (loading) {
-            return <LoadingScreen />;
-          }
-          if (error) {
-            return <ErrorScreen refetch={refetch} navigation={navigation} />;
-          } else {
+      <View style={{ flex: 1 }}>
+        <Query query={MSG_QUERY} variables={{ chatId }} pollInterval={2000}>
+          {({ loading, error, data, refetch }) => {
+            if (loading) {
+              return <LoadingScreen />;
+            }
+            if (error) {
+              return <ErrorScreen refetch={refetch} navigation={navigation} />;
+            }
             const messages = this.formatMessages(data.messages.edges);
+            console.log(`message[n]:= ${messages[messages.length - 1].text}`);
             return (
               <ChatComponent
+                style={{ flex: 1 }}
                 messages={messages}
                 chatId={chatId}
-                shouldUpdate={this.shouldUpdate}
                 refetch={refetch}
               />
             );
-          }
-        }}
-      </Query>
+          }}
+        </Query>
+        <KeyboardSpacer />
+      </View>
     );
   }
 }

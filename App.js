@@ -172,7 +172,6 @@ export default class App extends Component {
   };
 
   async componentWillMount() {
-    this.handleChangeLoginState(false);
     await this.registerForPushNotificationsAsync();
     this._notificationSubscription = Notifications.addListener(this.listen);
     if (Platform.OS === "android") {
