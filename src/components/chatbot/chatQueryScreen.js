@@ -79,7 +79,6 @@ export default class ChatQueryScreen extends React.Component {
               return <ErrorScreen refetch={refetch} navigation={navigation} />;
             }
             const messages = this.formatMessages(data.messages.edges);
-            console.log(`message[n]:= ${messages[messages.length - 1].text}`);
             return (
               <ChatComponent
                 style={{ flex: 1 }}
